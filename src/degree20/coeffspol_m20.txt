@@ -1,0 +1,485 @@
+
+echo on
+
+syms A c3 c4 c5 c6 c7 c8 d0 d1 d2 e0 e1 e2 f0 g0 h2 h1 i2 i1 i0 j0 j2 j1 k0I
+
+syms b0 b1 b2 b3 b4 b5 b6 b7 b8 b9 b10 b11 b12 b13 b14 b15 b16 b17 b18 b19 b20
+
+disp('The polynomial to evaluate is')
+The polynomial to evaluate is
+disp('P_m(A) = sum_{i=0}^{m} b_i * A^i, m = 20')
+P_m(A) = sum_{i=0}^{m} b_i * A^i, m = 20
+
+m = 20
+
+m =
+
+    20
+
+
+c=[c3; c4; c5; c6; c7; c8];
+
+% Polynomial P_20(A) to evaluate, defined by its coefficients (real or complex)
+b=[b20; b19; b18; b17; b16; b15; b14; b13; b12; b11; b10; b9; b8; b7; b6; b5; b4; b3; b2; b1; b0];
+
+%% Evaluation formulas
+disp('Evaluation formulas more efficient than the Paterson-Stockmeyer method')
+Evaluation formulas more efficient than the Paterson-Stockmeyer method
+y0=A^2*(sqrt(c8)*A^2+c7/(2*sqrt(c8))*A); %solution with positive sign in (28) of [3]
+
+y1=sum(c.*A.^([3:8]'));
+
+y2=(y1+d2*A^2+d1*A)*(y1+e0*y0+e2*A^2+e1*A)+f0*y1+g0*y0+h2*A^2+h1*A;
+
+y3=y2*(y0+i2*A^2+i1*A)+j0*y0+j2*A^2+j1*A+k0I;
+
+%% Equations
+disp('System of m+1 = 21 equations to solve')
+System of m+1 = 21 equations to solve
+[cy3,a1]=coeffs(y3,A);
+
+cy3=cy3.';
+
+v=[cy3 b a1.'] %Shows the coefficients of each power of A
+ 
+v =
+ 
+[                                                                                                                                                                                                                                                                                                                                                                                                                                                 c8^(5/2), b20, A^20]
+[                                                                                                                                                                                                                                                                                                                                                                                                                                        (5*c7*c8^(3/2))/2, b19, A^19]
+[                                                                                                                                                                                                                                                                                                                                                                                                      c8^(1/2)*(c7^2 + 2*c6*c8) + c8^2*i2 + c7^2*c8^(1/2), b18, A^18]
+[                                                                                                                                                                                                                                                                                                                                                                 c8^2*i1 + c8^(1/2)*(2*c5*c8 + 2*c6*c7) + 2*c7*c8*i2 + (c7*(c7^2 + 2*c6*c8))/(2*c8^(1/2)), b17, A^17]
+[                                                                                                                                                                                                                                                                                                                     i2*(c7^2 + 2*c6*c8) + c8^(1/2)*(c6^2 + c8*(c4 + c8^(1/2)*e0) + c4*c8 + 2*c5*c7) + (c7*(2*c5*c8 + 2*c6*c7))/(2*c8^(1/2)) + 2*c7*c8*i1, b16, A^16]
+[                                                                                                                                                                                                                                          i1*(c7^2 + 2*c6*c8) + c8^(1/2)*(c7*(c4 + c8^(1/2)*e0) + c3*c8 + c4*c7 + 2*c5*c6 + c8*(c3 + (c7*e0)/(2*c8^(1/2)))) + i2*(2*c5*c8 + 2*c6*c7) + (c7*(c6^2 + c8*(c4 + c8^(1/2)*e0) + c4*c8 + 2*c5*c7))/(2*c8^(1/2)), b15, A^15]
+[                                                                                                                                                           i2*(c6^2 + c8*(c4 + c8^(1/2)*e0) + c4*c8 + 2*c5*c7) + c8^(1/2)*(c5^2 + c6*(c4 + c8^(1/2)*e0) + c3*c7 + c4*c6 + c8*d2 + c8*e2 + c7*(c3 + (c7*e0)/(2*c8^(1/2)))) + i1*(2*c5*c8 + 2*c6*c7) + (c7*(c7*(c4 + c8^(1/2)*e0) + c3*c8 + c4*c7 + 2*c5*c6 + c8*(c3 + (c7*e0)/(2*c8^(1/2)))))/(2*c8^(1/2)), b14, A^14]
+[                                                                      i2*(c7*(c4 + c8^(1/2)*e0) + c3*c8 + c4*c7 + 2*c5*c6 + c8*(c3 + (c7*e0)/(2*c8^(1/2)))) + i1*(c6^2 + c8*(c4 + c8^(1/2)*e0) + c4*c8 + 2*c5*c7) + c8^(1/2)*(c5*(c4 + c8^(1/2)*e0) + c3*c6 + c4*c5 + c7*d2 + c8*d1 + c7*e2 + c8*e1 + c6*(c3 + (c7*e0)/(2*c8^(1/2)))) + (c7*(c5^2 + c6*(c4 + c8^(1/2)*e0) + c3*c7 + c4*c6 + c8*d2 + c8*e2 + c7*(c3 + (c7*e0)/(2*c8^(1/2)))))/(2*c8^(1/2)), b13, A^13]
+[              i1*(c7*(c4 + c8^(1/2)*e0) + c3*c8 + c4*c7 + 2*c5*c6 + c8*(c3 + (c7*e0)/(2*c8^(1/2)))) + c8^(1/2)*(c4*(c4 + c8^(1/2)*e0) + c3*c5 + c6*d2 + c7*d1 + c6*e2 + c7*e1 + c8*f0 + c5*(c3 + (c7*e0)/(2*c8^(1/2)))) + i2*(c5^2 + c6*(c4 + c8^(1/2)*e0) + c3*c7 + c4*c6 + c8*d2 + c8*e2 + c7*(c3 + (c7*e0)/(2*c8^(1/2)))) + (c7*(c5*(c4 + c8^(1/2)*e0) + c3*c6 + c4*c5 + c7*d2 + c8*d1 + c7*e2 + c8*e1 + c6*(c3 + (c7*e0)/(2*c8^(1/2)))))/(2*c8^(1/2)), b12, A^12]
+[i2*(c5*(c4 + c8^(1/2)*e0) + c3*c6 + c4*c5 + c7*d2 + c8*d1 + c7*e2 + c8*e1 + c6*(c3 + (c7*e0)/(2*c8^(1/2)))) + c8^(1/2)*(c3*(c4 + c8^(1/2)*e0) + c5*d2 + c6*d1 + c5*e2 + c6*e1 + c7*f0 + c4*(c3 + (c7*e0)/(2*c8^(1/2)))) + i1*(c5^2 + c6*(c4 + c8^(1/2)*e0) + c3*c7 + c4*c6 + c8*d2 + c8*e2 + c7*(c3 + (c7*e0)/(2*c8^(1/2)))) + (c7*(c4*(c4 + c8^(1/2)*e0) + c3*c5 + c6*d2 + c7*d1 + c6*e2 + c7*e1 + c8*f0 + c5*(c3 + (c7*e0)/(2*c8^(1/2)))))/(2*c8^(1/2)), b11, A^11]
+[       i1*(c5*(c4 + c8^(1/2)*e0) + c3*c6 + c4*c5 + c7*d2 + c8*d1 + c7*e2 + c8*e1 + c6*(c3 + (c7*e0)/(2*c8^(1/2)))) + i2*(c4*(c4 + c8^(1/2)*e0) + c3*c5 + c6*d2 + c7*d1 + c6*e2 + c7*e1 + c8*f0 + c5*(c3 + (c7*e0)/(2*c8^(1/2)))) + c8^(1/2)*(d2*(c4 + c8^(1/2)*e0) + c5*d1 + c4*e2 + c5*e1 + c6*f0 + c3*(c3 + (c7*e0)/(2*c8^(1/2)))) + (c7*(c3*(c4 + c8^(1/2)*e0) + c5*d2 + c6*d1 + c5*e2 + c6*e1 + c7*f0 + c4*(c3 + (c7*e0)/(2*c8^(1/2)))))/(2*c8^(1/2)), b10, A^10]
+[                               i2*(c3*(c4 + c8^(1/2)*e0) + c5*d2 + c6*d1 + c5*e2 + c6*e1 + c7*f0 + c4*(c3 + (c7*e0)/(2*c8^(1/2)))) + c8^(1/2)*(d1*(c4 + c8^(1/2)*e0) + c3*e2 + c4*e1 + c5*f0 + d2*(c3 + (c7*e0)/(2*c8^(1/2)))) + i1*(c4*(c4 + c8^(1/2)*e0) + c3*c5 + c6*d2 + c7*d1 + c6*e2 + c7*e1 + c8*f0 + c5*(c3 + (c7*e0)/(2*c8^(1/2)))) + (c7*(d2*(c4 + c8^(1/2)*e0) + c5*d1 + c4*e2 + c5*e1 + c6*f0 + c3*(c3 + (c7*e0)/(2*c8^(1/2)))))/(2*c8^(1/2)),  b9,  A^9]
+[                                                                 i2*(d2*(c4 + c8^(1/2)*e0) + c5*d1 + c4*e2 + c5*e1 + c6*f0 + c3*(c3 + (c7*e0)/(2*c8^(1/2)))) + i1*(c3*(c4 + c8^(1/2)*e0) + c5*d2 + c6*d1 + c5*e2 + c6*e1 + c7*f0 + c4*(c3 + (c7*e0)/(2*c8^(1/2)))) + c8^(1/2)*(c3*e1 + c4*f0 + d2*e2 + d1*(c3 + (c7*e0)/(2*c8^(1/2))) + c8^(1/2)*g0) + (c7*(d1*(c4 + c8^(1/2)*e0) + c3*e2 + c4*e1 + c5*f0 + d2*(c3 + (c7*e0)/(2*c8^(1/2)))))/(2*c8^(1/2)),  b8,  A^8]
+[                                                                                                                   i2*(d1*(c4 + c8^(1/2)*e0) + c3*e2 + c4*e1 + c5*f0 + d2*(c3 + (c7*e0)/(2*c8^(1/2)))) + i1*(d2*(c4 + c8^(1/2)*e0) + c5*d1 + c4*e2 + c5*e1 + c6*f0 + c3*(c3 + (c7*e0)/(2*c8^(1/2)))) + c8^(1/2)*(c3*f0 + d1*e2 + d2*e1 + (c7*g0)/(2*c8^(1/2))) + (c7*(c3*e1 + c4*f0 + d2*e2 + d1*(c3 + (c7*e0)/(2*c8^(1/2))) + c8^(1/2)*g0))/(2*c8^(1/2)),  b7,  A^7]
+[                                                                                                                                                                                               c8^(1/2)*(h2 + d1*e1) + i1*(d1*(c4 + c8^(1/2)*e0) + c3*e2 + c4*e1 + c5*f0 + d2*(c3 + (c7*e0)/(2*c8^(1/2)))) + i2*(c3*e1 + c4*f0 + d2*e2 + d1*(c3 + (c7*e0)/(2*c8^(1/2))) + c8^(1/2)*g0) + (c7*(c3*f0 + d1*e2 + d2*e1 + (c7*g0)/(2*c8^(1/2))))/(2*c8^(1/2)),  b6,  A^6]
+[                                                                                                                                                                                                                                                                             c8^(1/2)*h1 + i2*(c3*f0 + d1*e2 + d2*e1 + (c7*g0)/(2*c8^(1/2))) + i1*(c3*e1 + c4*f0 + d2*e2 + d1*(c3 + (c7*e0)/(2*c8^(1/2))) + c8^(1/2)*g0) + (c7*(h2 + d1*e1))/(2*c8^(1/2)),  b5,  A^5]
+[                                                                                                                                                                                                                                                                                                                                                 c8^(1/2)*j0 + i1*(c3*f0 + d1*e2 + d2*e1 + (c7*g0)/(2*c8^(1/2))) + i2*(h2 + d1*e1) + (c7*h1)/(2*c8^(1/2)),  b4,  A^4]
+[                                                                                                                                                                                                                                                                                                                                                                                                           h1*i2 + i1*(h2 + d1*e1) + (c7*j0)/(2*c8^(1/2)),  b3,  A^3]
+[                                                                                                                                                                                                                                                                                                                                                                                                                                               j2 + h1*i1,  b2,  A^2]
+[                                                                                                                                                                                                                                                                                                                                                                                                                                                       j1,  b1,    A]
+[                                                                                                                                                                                                                                                                                                                                                                                                                                                      k0I,  b0,    1]
+ 
+% [                                                                                                                                                                                                                                                                                                                                                                                                                                                 c8^(5/2), b20, A^20]
+% [                                                                                                                                                                                                                                                                                                                                                                                                                                        (5*c7*c8^(3/2))/2, b19, A^19]
+% [                                                                                                                                                                                                                                                                                                                                                                                                      c8^(1/2)*(c7^2 + 2*c6*c8) + c8^2*i2 + c7^2*c8^(1/2), b18, A^18]
+% [                                                                                                                                                                                                                                                                                                                                                                 c8^2*i1 + c8^(1/2)*(2*c5*c8 + 2*c6*c7) + 2*c7*c8*i2 + (c7*(c7^2 + 2*c6*c8))/(2*c8^(1/2)), b17, A^17]
+% [                                                                                                                                                                                                                                                                                                                     i2*(c7^2 + 2*c6*c8) + c8^(1/2)*(c6^2 + c8*(c4 + c8^(1/2)*e0) + c4*c8 + 2*c5*c7) + (c7*(2*c5*c8 + 2*c6*c7))/(2*c8^(1/2)) + 2*c7*c8*i1, b16, A^16]
+% [                                                                                                                                                                                                                                          i1*(c7^2 + 2*c6*c8) + c8^(1/2)*(c7*(c4 + c8^(1/2)*e0) + c3*c8 + c4*c7 + 2*c5*c6 + c8*(c3 + (c7*e0)/(2*c8^(1/2)))) + i2*(2*c5*c8 + 2*c6*c7) + (c7*(c6^2 + c8*(c4 + c8^(1/2)*e0) + c4*c8 + 2*c5*c7))/(2*c8^(1/2)), b15, A^15]
+% [                                                                                                                                                           i2*(c6^2 + c8*(c4 + c8^(1/2)*e0) + c4*c8 + 2*c5*c7) + c8^(1/2)*(c5^2 + c6*(c4 + c8^(1/2)*e0) + c3*c7 + c4*c6 + c8*d2 + c8*e2 + c7*(c3 + (c7*e0)/(2*c8^(1/2)))) + i1*(2*c5*c8 + 2*c6*c7) + (c7*(c7*(c4 + c8^(1/2)*e0) + c3*c8 + c4*c7 + 2*c5*c6 + c8*(c3 + (c7*e0)/(2*c8^(1/2)))))/(2*c8^(1/2)), b14, A^14]
+% [                                                                      i2*(c7*(c4 + c8^(1/2)*e0) + c3*c8 + c4*c7 + 2*c5*c6 + c8*(c3 + (c7*e0)/(2*c8^(1/2)))) + i1*(c6^2 + c8*(c4 + c8^(1/2)*e0) + c4*c8 + 2*c5*c7) + c8^(1/2)*(c5*(c4 + c8^(1/2)*e0) + c3*c6 + c4*c5 + c7*d2 + c8*d1 + c7*e2 + c8*e1 + c6*(c3 + (c7*e0)/(2*c8^(1/2)))) + (c7*(c5^2 + c6*(c4 + c8^(1/2)*e0) + c3*c7 + c4*c6 + c8*d2 + c8*e2 + c7*(c3 + (c7*e0)/(2*c8^(1/2)))))/(2*c8^(1/2)), b13, A^13]
+% [              i1*(c7*(c4 + c8^(1/2)*e0) + c3*c8 + c4*c7 + 2*c5*c6 + c8*(c3 + (c7*e0)/(2*c8^(1/2)))) + c8^(1/2)*(c4*(c4 + c8^(1/2)*e0) + c3*c5 + c6*d2 + c7*d1 + c6*e2 + c7*e1 + c8*f0 + c5*(c3 + (c7*e0)/(2*c8^(1/2)))) + i2*(c5^2 + c6*(c4 + c8^(1/2)*e0) + c3*c7 + c4*c6 + c8*d2 + c8*e2 + c7*(c3 + (c7*e0)/(2*c8^(1/2)))) + (c7*(c5*(c4 + c8^(1/2)*e0) + c3*c6 + c4*c5 + c7*d2 + c8*d1 + c7*e2 + c8*e1 + c6*(c3 + (c7*e0)/(2*c8^(1/2)))))/(2*c8^(1/2)), b12, A^12]
+% [i2*(c5*(c4 + c8^(1/2)*e0) + c3*c6 + c4*c5 + c7*d2 + c8*d1 + c7*e2 + c8*e1 + c6*(c3 + (c7*e0)/(2*c8^(1/2)))) + c8^(1/2)*(c3*(c4 + c8^(1/2)*e0) + c5*d2 + c6*d1 + c5*e2 + c6*e1 + c7*f0 + c4*(c3 + (c7*e0)/(2*c8^(1/2)))) + i1*(c5^2 + c6*(c4 + c8^(1/2)*e0) + c3*c7 + c4*c6 + c8*d2 + c8*e2 + c7*(c3 + (c7*e0)/(2*c8^(1/2)))) + (c7*(c4*(c4 + c8^(1/2)*e0) + c3*c5 + c6*d2 + c7*d1 + c6*e2 + c7*e1 + c8*f0 + c5*(c3 + (c7*e0)/(2*c8^(1/2)))))/(2*c8^(1/2)), b11, A^11]
+% [       i1*(c5*(c4 + c8^(1/2)*e0) + c3*c6 + c4*c5 + c7*d2 + c8*d1 + c7*e2 + c8*e1 + c6*(c3 + (c7*e0)/(2*c8^(1/2)))) + i2*(c4*(c4 + c8^(1/2)*e0) + c3*c5 + c6*d2 + c7*d1 + c6*e2 + c7*e1 + c8*f0 + c5*(c3 + (c7*e0)/(2*c8^(1/2)))) + c8^(1/2)*(d2*(c4 + c8^(1/2)*e0) + c5*d1 + c4*e2 + c5*e1 + c6*f0 + c3*(c3 + (c7*e0)/(2*c8^(1/2)))) + (c7*(c3*(c4 + c8^(1/2)*e0) + c5*d2 + c6*d1 + c5*e2 + c6*e1 + c7*f0 + c4*(c3 + (c7*e0)/(2*c8^(1/2)))))/(2*c8^(1/2)), b10, A^10]
+% [                               i2*(c3*(c4 + c8^(1/2)*e0) + c5*d2 + c6*d1 + c5*e2 + c6*e1 + c7*f0 + c4*(c3 + (c7*e0)/(2*c8^(1/2)))) + c8^(1/2)*(d1*(c4 + c8^(1/2)*e0) + c3*e2 + c4*e1 + c5*f0 + d2*(c3 + (c7*e0)/(2*c8^(1/2)))) + i1*(c4*(c4 + c8^(1/2)*e0) + c3*c5 + c6*d2 + c7*d1 + c6*e2 + c7*e1 + c8*f0 + c5*(c3 + (c7*e0)/(2*c8^(1/2)))) + (c7*(d2*(c4 + c8^(1/2)*e0) + c5*d1 + c4*e2 + c5*e1 + c6*f0 + c3*(c3 + (c7*e0)/(2*c8^(1/2)))))/(2*c8^(1/2)),  b9,  A^9]
+% [                                                                 i2*(d2*(c4 + c8^(1/2)*e0) + c5*d1 + c4*e2 + c5*e1 + c6*f0 + c3*(c3 + (c7*e0)/(2*c8^(1/2)))) + i1*(c3*(c4 + c8^(1/2)*e0) + c5*d2 + c6*d1 + c5*e2 + c6*e1 + c7*f0 + c4*(c3 + (c7*e0)/(2*c8^(1/2)))) + c8^(1/2)*(c3*e1 + c4*f0 + d2*e2 + d1*(c3 + (c7*e0)/(2*c8^(1/2))) + c8^(1/2)*g0) + (c7*(d1*(c4 + c8^(1/2)*e0) + c3*e2 + c4*e1 + c5*f0 + d2*(c3 + (c7*e0)/(2*c8^(1/2)))))/(2*c8^(1/2)),  b8,  A^8]
+% [                                                                                                                   i2*(d1*(c4 + c8^(1/2)*e0) + c3*e2 + c4*e1 + c5*f0 + d2*(c3 + (c7*e0)/(2*c8^(1/2)))) + i1*(d2*(c4 + c8^(1/2)*e0) + c5*d1 + c4*e2 + c5*e1 + c6*f0 + c3*(c3 + (c7*e0)/(2*c8^(1/2)))) + c8^(1/2)*(c3*f0 + d1*e2 + d2*e1 + (c7*g0)/(2*c8^(1/2))) + (c7*(c3*e1 + c4*f0 + d2*e2 + d1*(c3 + (c7*e0)/(2*c8^(1/2))) + c8^(1/2)*g0))/(2*c8^(1/2)),  b7,  A^7]
+% [                                                                                                                                                                                               c8^(1/2)*(h2 + d1*e1) + i1*(d1*(c4 + c8^(1/2)*e0) + c3*e2 + c4*e1 + c5*f0 + d2*(c3 + (c7*e0)/(2*c8^(1/2)))) + i2*(c3*e1 + c4*f0 + d2*e2 + d1*(c3 + (c7*e0)/(2*c8^(1/2))) + c8^(1/2)*g0) + (c7*(c3*f0 + d1*e2 + d2*e1 + (c7*g0)/(2*c8^(1/2))))/(2*c8^(1/2)),  b6,  A^6]
+% [                                                                                                                                                                                                                                                                             c8^(1/2)*h1 + i2*(c3*f0 + d1*e2 + d2*e1 + (c7*g0)/(2*c8^(1/2))) + i1*(c3*e1 + c4*f0 + d2*e2 + d1*(c3 + (c7*e0)/(2*c8^(1/2))) + c8^(1/2)*g0) + (c7*(h2 + d1*e1))/(2*c8^(1/2)),  b5,  A^5]
+% [                                                                                                                                                                                                                                                                                                                                                 c8^(1/2)*j0 + i1*(c3*f0 + d1*e2 + d2*e1 + (c7*g0)/(2*c8^(1/2))) + i2*(h2 + d1*e1) + (c7*h1)/(2*c8^(1/2)),  b4,  A^4]
+% [                                                                                                                                                                                                                                                                                                                                                                                                           h1*i2 + i1*(h2 + d1*e1) + (c7*j0)/(2*c8^(1/2)),  b3,  A^3]
+% [                                                                                                                                                                                                                                                                                                                                                                                                                                               j2 + h1*i1,  b2,  A^2]
+% [                                                                                                                                                                                                                                                                                                                                                                                                                                                       j1,  b1,    A]
+% [                                                                                                                                                                                                                                                                                                                                                                                                                                                      k0I,  b0,    1]
+
+%% System of 21 equations
+
+cy3=cy3-b; 
+
+%% Variable solving and substitution
+
+disp('Variable solving and substitution')
+Variable solving and substitution
+
+c8s=solve(cy3(1),c8) %3 solutions
+[Warning: Solutions are only valid under certain conditions. To include parameters and conditions in the solution, specify the 'ReturnConditions' value as 'true'.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('sym/solve>warnIfParams', 'C:\Program Files\MATLAB\R2023a\toolbox\symbolic\symbolic\@sym\solve.m', 478)" style="font-weight:bold">sym/solve>warnIfParams</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2023a\toolbox\symbolic\symbolic\@sym\solve.m',478,0)">line 478</a>)
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('sym/solve', 'C:\Program Files\MATLAB\R2023a\toolbox\symbolic\symbolic\@sym\solve.m', 357)" style="font-weight:bold">sym/solve</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2023a\toolbox\symbolic\symbolic\@sym\solve.m',357,0)">line 357</a>)
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('coeffspol_m20', 'I:\ArticulosMath\Artículos\2025 Paris\coeffspol_m20.m', 106)" style="font-weight:bold">coeffspol_m20</a> (<a href="matlab: opentoline('I:\ArticulosMath\Artículos\2025 Paris\coeffspol_m20.m',106,0)">line 106</a>)
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('run', 'C:\Program Files\MATLAB\R2023a\toolbox\matlab\lang\run.m', 91)" style="font-weight:bold">run</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2023a\toolbox\matlab\lang\run.m',91,0)">line 91</a>)] 
+ 
+c8s =
+ 
+                                                        b20^(2/5)
+-b20^(2/5)*(5^(1/2)/4 - (2^(1/2)*(5 - 5^(1/2))^(1/2)*1i)/4 + 1/4)
+-b20^(2/5)*((2^(1/2)*(5 - 5^(1/2))^(1/2)*1i)/4 + 5^(1/2)/4 + 1/4)
+ 
+
+c8s=c8s(1) %real solution
+ 
+c8s =
+ 
+b20^(2/5)
+ 
+
+cy3=subs(cy3,c8,c8s); %variable substitution
+
+c7s=solve(cy3(2),c7,'ReturnConditions',true); %one solution depending on c8
+
+c7s.conditions %conditions for the existence of solutions: b20 ~= 0
+ 
+ans =
+ 
+b20 ~= 0
+ 
+
+c7s=c7s.c7 %solution
+ 
+c7s =
+ 
+(2*b19)/(5*b20^(3/5))
+ 
+
+cy3=subs(cy3,c7,c7s); %variable substitution
+
+symvar(cy3(3))  %depends on the unknown variables [c6, i2] and the polynomial coefficients [b18, b19, b20]
+ 
+ans =
+ 
+[b18, b19, b20, c6, i2]
+ 
+
+c6s=solve(cy3(3), c6,'ReturnConditions',true);
+
+c6s.conditions %Conditions for the existence of solutions: b20 ~= 0
+ 
+ans =
+ 
+symtrue
+ 
+
+c6s=c6s.c6 %one solution depending on i2 and the polynomial coefficients [b18, b19, b20]
+ 
+c6s =
+ 
+-(b20^(4/5)*i2 - b18 + (8*b19^2)/(25*b20))/(2*b20^(3/5))
+ 
+
+cy3=subs(cy3,c6,c6s); %variable substitution
+
+symvar(cy3(4)) %depends on the unknown variables [c5, i1, i2]  and the polynomial coefficients [b17, b18, b19, b20]
+ 
+ans =
+ 
+[b17, b18, b19, b20, c5, i1, i2]
+ 
+
+c5s=solve(cy3(4), c5,'ReturnConditions',true); %one solution depending on the unknown variables [i1, i2] and the polynomial coefficients [b17, b18, b19, b20]
+%since i1 depends on i2 (see below), c5s depends on %one solution depending on i2 and the polynomial coefficients [b17, b18, b19, b20]
+
+c5s.conditions %conditions for the existence of solutions: b20 ~= 0
+ 
+ans =
+ 
+symtrue
+ 
+
+c5s=c5s.c5 %one solution depending on i2 and the polynomial coefficients [b17, b18, b19, b20]
+ 
+c5s =
+ 
+-(25*b20^(14/5)*i1 - 25*b17*b20^2 - 4*b19^3 + 15*b18*b19*b20 + 5*b19*b20^(9/5)*i2)/(50*b20^(13/5))
+ 
+
+cy3=simplify(subs(cy3,c5,c5s)); %variable substitution
+
+symvar(cy3(5))  %depends on [c4, e0, i1, i2] and [b16, b17, b18, b19, b20]
+ 
+ans =
+ 
+[b16, b17, b18, b19, b20, c4, e0, i1, i2]
+ 
+
+e0s=solve(cy3(5), e0,'ReturnConditions',true); %depends on [c4, i1, i2] and [b16, b17, b18, b19, b20]
+%since c4 and i1 depend on i2 (see below) then e0s depends on i2 and [b16, b17, b18, b19, b20]
+
+e0s.conditions %conditions: b20 ~= 0
+ 
+ans =
+ 
+b20 ~= 0
+ 
+
+e0s=e0s.e0; %one solution depending on i2 and [b16, b17, b18, b19, b20]
+
+cy3=simplify(subs(cy3,e0,e0s)); %variable substitution
+
+symvar(cy3(6))  %depends on [c3, c4, i1, i2] and [b15, b16, b17, b18, b19, b20]
+ 
+ans =
+ 
+[b15, b16, b17, b18, b19, b20, c3, c4, i1, i2]
+ 
+
+c3s=solve(cy3(6), c3,'ReturnConditions',true); %depends on [c4, i1, i2] and [b15, b16, b17, b18, b19, b20]
+%since c4 and i1 depend on i2 (see below) then c3s depends on i2 and [b15, b16, b17, b18, b19, b20]
+
+c3s.conditions %conditions: b20 ~= 0
+ 
+ans =
+ 
+b20 ~= 0
+ 
+
+c3s=c3s.c3; %one solution depending on i2 and [b15, b16, b17, b18, b19, b20]
+
+cy3=simplify(subs(cy3,c3,c3s));
+
+symvar(cy3(7)) %depends on [d2, e2, i1, i2] and [b14, b15, b16, b17, b18, b19, b20]
+ 
+ans =
+ 
+[b14, b15, b16, b17, b18, b19, b20, d2, e2, i1, i2]
+ 
+
+d2s=solve(cy3(7), d2,'ReturnConditions',true); %depends on [e2, i1, i2] and [b14, b15, b16, b17, b18, b19, b20]
+%since e2 and i1 depend on i2 (see below) then d2s depends on i2 and [b14, b15, b16, b17, b18, b19, b20]
+
+d2s.conditions %b20 ~= 0
+ 
+ans =
+ 
+b20 ~= 0
+ 
+
+d2s=d2s.d2; %one solution depending on i2 and [b14, b15, b16, b17, b18, b19, b20]
+
+cy3=simplify(subs(cy3,d2,d2s));
+
+symvar(cy3(8)) %[d1, e1, i1, i2] and [b13, b14, b15, b16, b17, b18, b19, b20]
+ 
+ans =
+ 
+[b13, b14, b15, b16, b17, b18, b19, b20, d1, e1, i1, i2]
+ 
+
+d1s=solve(cy3(8), d1,'ReturnConditions',true); %depends on %[e1, i1, i2] and [b13, b14, b15, b16, b17, b18, b19, b20]
+%since e1 and i1 depend on i2 (see below) then d1s depends on i2 and [b13, b14, b15, b16, b17, b18, b19, b20]
+
+d1s.conditions %b20 ~= 0
+ 
+ans =
+ 
+b20 ~= 0
+ 
+
+d1s=d1s.d1; %one solution depending on i2 and [b13, b14, b15, b16, b17, b18, b19, b20]
+
+cy3=simplify(subs(cy3,d1,d1s));
+
+symvar(cy3(9)) %[c4, f0, i1, i2] and [b12, b13, b14, b15, b16, b17, b18, b19, b20]
+ 
+ans =
+ 
+[b12, b13, b14, b15, b16, b17, b18, b19, b20, c4, f0, i1, i2]
+ 
+
+f0s=solve(cy3(9), f0,'ReturnConditions',true); %depends on [c4, i1, i2] and [b12, b13, b14, b15, b16, b17, b18, b19, b20]
+%since i1 and c4 depend on i2 (see below) then f0s depends on i2 and 
+% [b12, b13, b14, b15, b16, b17, b18, b19, b20]
+
+f0s.conditions %b20 ~= 0
+ 
+ans =
+ 
+b20 ~= 0
+ 
+
+f0s=f0s.f0; %one solution depending on i2 and [b12, b13, b14, b15, b16, b17, b18, b19, b20]
+
+cy3=simplify(subs(cy3,f0,f0s));
+
+symvar(cy3(10)) %Depends on [i1, i2] and [b11, b12, b13, b14, b15, b16, b17, b18, b19, b20]
+ 
+ans =
+ 
+[b11, b12, b13, b14, b15, b16, b17, b18, b19, b20, i1, i2]
+ 
+[cc,aa]=coeffs(cy3(10),i1) %[i1^3, i1^2, i1, 1] polynomial of degree 3 on variable i1 with coefficients depending on i2 and the polynomial coefficients to evaluate
+ 
+cc =
+ 
+[(5*b20^(2/5))/8, -(4687500*b17*b20^(38/5) + 1500000*b19^3*b20^(28/5) - 4687500*b18*b19*b20^(33/5) + 4687500*b19*b20^(37/5)*i2)/(12500000*b20^8), -(418400*b19^6*b20^(14/5) - 6250000*b14*b20^(39/5) - 781250*b18^3*b20^(29/5) + 1562500*b17^2*b20^(34/5) + 27343750*b20^(41/5)*i2^3 - 2550000*b18*b19^4*b20^(19/5) + 3000000*b17*b19^3*b20^(24/5) - 3750000*b16*b19^2*b20^(29/5) - 1950000*b19^4*b20^(23/5)*i2 - 2343750*b18^2*b20^(33/5)*i2 - 11718750*b18*b20^(37/5)*i2^2 + 3750000*b18^2*b19^2*b20^(24/5) + 3750000*b19^2*b20^(32/5)*i2^2 + 5000000*b15*b19*b20^(34/5) + 3125000*b16*b18*b20^(34/5) + 9375000*b16*b20^(38/5)*i2 - 5625000*b17*b18*b19*b20^(29/5) - 9375000*b17*b19*b20^(33/5)*i2 + 7500000*b18*b19^2*b20^(28/5)*i2)/(12500000*b20^8), -(12500000*b11*b20^8 + 313216*b19^9 + 1562500*b17^3*b20^6 + 5500000*b13*b19^2*b20^6 - 4500000*b14*b19^3*b20^5 + 4687500*b15*b18^2*b20^6 + 3900000*b15*b19^4*b20^4 - 3492000*b16*b19^5*b20^3 - 3906250*b17*b18^3*b20^5 + 5000000*b16^2*b19*b20^6 + 3191200*b17*b19^6*b20^2 + 3515625*b18^4*b19*b20^4 - 317600*b19^7*b20^(9/5)*i2 + 4687500*b15*b20^(38/5)*i2^2 - 3906250*b17*b20^(37/5)*i2^3 - 2734375*b19*b20^(36/5)*i2^4 + 7500000*b17^2*b19^3*b20^4 + 9348000*b18^2*b19^5*b20^2 - 11000000*b18^3*b19^3*b20^3 + 636000*b19^5*b20^(18/5)*i2^2 - 1500000*b19^3*b20^(27/5)*i2^3 - 7500000*b12*b19*b20^7 - 6250000*b13*b18*b20^7 - 6250000*b14*b17*b20^7 - 6250000*b15*b16*b20^7 - 2957280*b18*b19^7*b20 - 6250000*b13*b20^(39/5)*i2 + 21750000*b17*b18^2*b19^2*b20^4 - 4500000*b18^2*b19^3*b20^(19/5)*i2 - 3000000*b18*b19^3*b20^(23/5)*i2^2 + 3750000*b17*b19^2*b20^(28/5)*i2^2 + 2343750*b18^2*b19*b20^(28/5)*i2^2 + 10000000*b14*b18*b19*b20^6 + 10000000*b15*b17*b19*b20^6 + 9375000*b16*b17*b18*b20^6 + 5000000*b14*b19*b20^(34/5)*i2 + 3125000*b15*b18*b20^(34/5)*i2 + 3125000*b16*b17*b20^(34/5)*i2 - 12750000*b15*b18*b19^2*b20^5 - 12750000*b16*b17*b19^2*b20^5 + 15000000*b16*b18*b19^3*b20^4 - 12187500*b16*b18^2*b19*b20^5 - 16950000*b17*b18*b19^4*b20^3 - 12187500*b17^2*b18*b19*b20^5 + 2256000*b18*b19^5*b20^(14/5)*i2 - 2550000*b17*b19^4*b20^(19/5)*i2 + 3000000*b16*b19^3*b20^(24/5)*i2 + 2187500*b18^3*b19*b20^(24/5)*i2 - 3750000*b15*b19^2*b20^(29/5)*i2 - 2343750*b17*b18^2*b20^(29/5)*i2 - 2812500*b17^2*b19*b20^(29/5)*i2 - 4687500*b16*b19*b20^(33/5)*i2^2 - 2343750*b17*b18*b20^(33/5)*i2^2 + 4687500*b18*b19*b20^(32/5)*i2^3 + 7500000*b17*b18*b19^2*b20^(24/5)*i2 - 5625000*b16*b18*b19*b20^(29/5)*i2)/(12500000*b20^8)]
+ 
+ 
+aa =
+ 
+[i1^3, i1^2, i1, 1]
+ 
+[cc,aa]=coeffs(cy3(10),i2) %[i2^4, i2^3, i2^2, i2, 1] polynomial of degree 4 on variable i2 with coefficients depending on i1 and the polynomial coefficients to evaluate
+ 
+cc =
+ 
+[(7*b19)/(32*b20^(4/5)), (3906250*b17*b20^(37/5) - 27343750*b20^(41/5)*i1 + 1500000*b19^3*b20^(27/5) - 4687500*b18*b19*b20^(32/5))/(12500000*b20^8), -(4687500*b15*b20^(38/5) + 636000*b19^5*b20^(18/5) - 3000000*b18*b19^3*b20^(23/5) + 3750000*b17*b19^2*b20^(28/5) + 2343750*b18^2*b19*b20^(28/5) + 3750000*b19^2*b20^(32/5)*i1 - 4687500*b16*b19*b20^(33/5) - 2343750*b17*b18*b20^(33/5) - 11718750*b18*b20^(37/5)*i1)/(12500000*b20^8), (6250000*b13*b20^(39/5) + 317600*b19^7*b20^(9/5) - 2256000*b18*b19^5*b20^(14/5) + 2550000*b17*b19^4*b20^(19/5) - 3000000*b16*b19^3*b20^(24/5) - 2187500*b18^3*b19*b20^(24/5) + 3750000*b15*b19^2*b20^(29/5) + 2343750*b17*b18^2*b20^(29/5) + 2812500*b17^2*b19*b20^(29/5) + 1950000*b19^4*b20^(23/5)*i1 + 2343750*b18^2*b20^(33/5)*i1 - 4687500*b19*b20^(37/5)*i1^2 + 4500000*b18^2*b19^3*b20^(19/5) - 5000000*b14*b19*b20^(34/5) - 3125000*b15*b18*b20^(34/5) - 3125000*b16*b17*b20^(34/5) - 9375000*b16*b20^(38/5)*i1 + 5625000*b16*b18*b19*b20^(29/5) + 9375000*b17*b19*b20^(33/5)*i1 - 7500000*b17*b18*b19^2*b20^(24/5) - 7500000*b18*b19^2*b20^(28/5)*i1)/(12500000*b20^8), -(12500000*b11*b20^8 + 313216*b19^9 + 1562500*b17^3*b20^6 - 7812500*b20^(42/5)*i1^3 + 5500000*b13*b19^2*b20^6 - 4500000*b14*b19^3*b20^5 + 4687500*b15*b18^2*b20^6 + 3900000*b15*b19^4*b20^4 - 3492000*b16*b19^5*b20^3 - 3906250*b17*b18^3*b20^5 + 5000000*b16^2*b19*b20^6 + 3191200*b17*b19^6*b20^2 + 3515625*b18^4*b19*b20^4 + 418400*b19^6*b20^(14/5)*i1 - 781250*b18^3*b20^(29/5)*i1 + 1562500*b17^2*b20^(34/5)*i1 + 4687500*b17*b20^(38/5)*i1^2 + 7500000*b17^2*b19^3*b20^4 + 9348000*b18^2*b19^5*b20^2 - 11000000*b18^3*b19^3*b20^3 + 1500000*b19^3*b20^(28/5)*i1^2 - 7500000*b12*b19*b20^7 - 6250000*b13*b18*b20^7 - 6250000*b14*b17*b20^7 - 6250000*b15*b16*b20^7 - 2957280*b18*b19^7*b20 - 6250000*b14*b20^(39/5)*i1 + 21750000*b17*b18^2*b19^2*b20^4 + 3750000*b18^2*b19^2*b20^(24/5)*i1 + 10000000*b14*b18*b19*b20^6 + 10000000*b15*b17*b19*b20^6 + 9375000*b16*b17*b18*b20^6 + 5000000*b15*b19*b20^(34/5)*i1 + 3125000*b16*b18*b20^(34/5)*i1 - 12750000*b15*b18*b19^2*b20^5 - 12750000*b16*b17*b19^2*b20^5 + 15000000*b16*b18*b19^3*b20^4 - 12187500*b16*b18^2*b19*b20^5 - 16950000*b17*b18*b19^4*b20^3 - 12187500*b17^2*b18*b19*b20^5 - 2550000*b18*b19^4*b20^(19/5)*i1 + 3000000*b17*b19^3*b20^(24/5)*i1 - 3750000*b16*b19^2*b20^(29/5)*i1 - 4687500*b18*b19*b20^(33/5)*i1^2 - 5625000*b17*b18*b19*b20^(29/5)*i1)/(12500000*b20^8)]
+ 
+ 
+aa =
+ 
+[i2^4, i2^3, i2^2, i2, 1]
+ 
+i1s=solve(cy3(10), i1,'ReturnConditions',true)
+
+i1s = 
+
+  <a href="matlab:helpPopup struct" style="font-weight:bold">struct</a> with fields:
+
+            i1: [3×1 sym]
+    parameters: [1×0 sym]
+    conditions: [3×1 sym]
+
+%i1 is the solution of a cubic polynomial equation whose coefficients 
+% depend on i2 and the coefficients bi of the polynomail to evaluate, then 
+% there are three solutions of i1 depending on i2 and the polynomial coefficients
+
+i1s.conditions %b20 ~= 0
+ 
+ans =
+ 
+b20 ~= 0
+b20 ~= 0
+b20 ~= 0
+ 
+
+symvar(cy3(11)) %depends on [c4, e2, i1, i2] and [b10, b12, b13, b14, b15, b16, b17, b18, b19, b20]
+ 
+ans =
+ 
+[b10, b12, b13, b14, b15, b16, b17, b18, b19, b20, c4, e2, i1, i2]
+ 
+
+e2s=solve(cy3(11), e2,'ReturnConditions',true); %depends on [c4, i1, i2] and [b10, b12, b13, b14, b15, b16, b17, b18, b19, b20]
+%since i1 depends on i2 and c4 also depends on i2 (see below) then e2s
+%depends on i2 and [b10, b12, b13, b14, b15, b16, b17, b18, b19, b20]
+
+e2s.conditions %500*b16*b20^(43/5) + 375*b20^(46/5)*i2^2 + 220*b18*b19^2*b20^(33/5) + 100*b19^2*b20^(37/5)*i2 ~= 1000*b20^(46/5)*c4 + 48*b19^4*b20^(28/5) + 125*b18^2*b20^(38/5) + 300*b17*b19*b20^(38/5) + 250*b18*b20^(42/5)*i2 + 100*b19*b20^(42/5)*i1
+ 
+ans =
+ 
+500*b16*b20^(43/5) + 375*b20^(46/5)*i2^2 + 220*b18*b19^2*b20^(33/5) + 100*b19^2*b20^(37/5)*i2 ~= 1000*b20^(46/5)*c4 + 48*b19^4*b20^(28/5) + 125*b18^2*b20^(38/5) + 300*b17*b19*b20^(38/5) + 250*b18*b20^(42/5)*i2 + 100*b19*b20^(42/5)*i1
+ 
+
+e2s=e2s.e2; %one solution depending on i2 and [b10, b12, b13, b14, b15, b16, b17, b18, b19, b20]
+
+cy3=simplify(subs(cy3,e2,e2s));
+
+symvar(cy3(12)) %depends on [c4, e1, i1, i2] and [b10, b12, b13, b14, b15, b16, b17, b18, b19, b20, b9]
+ 
+ans =
+ 
+[b10, b12, b13, b14, b15, b16, b17, b18, b19, b20, b9, c4, e1, i1, i2]
+ 
+
+e1s=solve(cy3(12), e1,'ReturnConditions',true);%depends on [c4, i1, i2] and [b10, b12, b13, b14, b15, b16, b17, b18, b19, b20, b9]
+%since i1 depends on i2 and c4 also depends on i2 (see below) then e1s
+%depends on i2 and [b10, b12, b13, b14, b15, b16, b17, b18, b19, b20, b9]
+
+e1s.conditions %500*b16*b20^(48/5) + 375*b20^(51/5)*i2^2 + 220*b18*b19^2*b20^(38/5) + 100*b19^2*b20^(42/5)*i2 ~= 1000*b20^(51/5)*c4 + 48*b19^4*b20^(33/5) + 125*b18^2*b20^(43/5) + 300*b17*b19*b20^(43/5) + 250*b18*b20^(47/5)*i2 + 100*b19*b20^(47/5)*i1
+ 
+ans =
+ 
+500*b16*b20^(48/5) + 375*b20^(51/5)*i2^2 + 220*b18*b19^2*b20^(38/5) + 100*b19^2*b20^(42/5)*i2 ~= 1000*b20^(51/5)*c4 + 48*b19^4*b20^(33/5) + 125*b18^2*b20^(43/5) + 300*b17*b19*b20^(43/5) + 250*b18*b20^(47/5)*i2 + 100*b19*b20^(47/5)*i1
+ 
+
+e1s=e1s.e1; %one solution depending on i2 and [b10, b12, b13, b14, b15, b16, b17, b18, b19, b20, b9]
+
+cy3=simplify(subs(cy3,e1,e1s));
+
+symvar(cy3(13)) %depends on [c4, g0, i1, i2] and [b10, b12, b13, b14, b15, b16, b17, b18, b19, b20, b8, b9]
+ 
+ans =
+ 
+[b10, b12, b13, b14, b15, b16, b17, b18, b19, b20, b8, b9, c4, g0, i1, i2]
+ 
+
+g0s=solve(cy3(13), g0,'ReturnConditions',true); %depends on [c4, i1, i2] and [b10, b12, b13, b14, b15, b16, b17, b18, b19, b20, b8, b9]
+%since c4 and i1 depend on i2 (see below for c4) and [b10, b12, b13, b14, b15, b16, b17, b18, b19, b20, b8, b9]
+%then g0s depends on i2 and [b10, b12, b13, b14, b15, b16, b17, b18, b19, b20, b8, b9]
+g0s.conditions %b20 ~= 0 & 1000*b20^(18/5)*c4 + 48*b19^4 + 125*b18^2*b20^2 + 300*b17*b19*b20^2 + 250*b18*b20^(14/5)*i2 + 100*b19*b20^(14/5)*i1 ~= 500*b16*b20^3 + 375*b20^(18/5)*i2^2 + 100*b19^2*b20^(9/5)*i2 + 220*b18*b19^2*b20
+ 
+ans =
+ 
+b20 ~= 0 & 1000*b20^(18/5)*c4 + 48*b19^4 + 125*b18^2*b20^2 + 300*b17*b19*b20^2 + 250*b18*b20^(14/5)*i2 + 100*b19*b20^(14/5)*i1 ~= 500*b16*b20^3 + 375*b20^(18/5)*i2^2 + 100*b19^2*b20^(9/5)*i2 + 220*b18*b19^2*b20
+ 
+
+g0s=g0s.g0; %one solution depending on i2 and [b10, b12, b13, b14, b15, b16, b17, b18, b19, b20, b8, b9]
+
+cy3=simplify(subs(cy3,g0,g0s));
+
+symvar(cy3(14)) %Depends on [c4, i1, i2, b10, b12, b13, b14, b15, b16, b17, b18, b19, b20, b7, b8, b9]
+ 
+ans =
+ 
+[b10, b12, b13, b14, b15, b16, b17, b18, b19, b20, b7, b8, b9, c4, i1, i2]
+ 
+
+c4s=solve(cy3(14), c4, 'ReturnConditions',true); %4 roots of a polynomial of degree 4 in c4 with coefficients depending on i1, i2 and the coefficients of the polynomial to evaluate
+
+c4s.conditions;
+
+c4s=c4s.c4; %4 roots of a polynomial of degree 4, depending on [i1, i2] and [b10, b12, b13, b14, b15, b16, b17, b18, b19, b20, b7, b8, b9]
+% since i1 depends on i2 then c4 depends on i2 and [b10, b12, b13, b14, b15, b16, b17, b18, b19, b20, b7, b8, b9]
+
+symvar(cy3(15)) %depends on [c4, h2, i1, i2, b10, b12, b13, b14, b15, b16, b17, b18, b19, b20, b6, b8, b9]
+ 
+ans =
+ 
+[b10, b12, b13, b14, b15, b16, b17, b18, b19, b20, b6, b8, b9, c4, h2, i1, i2]
+ 
+
+h2s=solve(cy3(15), h2, 'ReturnConditions',true); %one solution depending on [c4, i1, i2] and [b10, b12, b13, b14, b15, b16, b17, b18, b19, b20, b6, b8, b9]
+%since c4, i1, depend on i2 then, h2s depends on i2 and and [b10, b12, b13, b14, b15, b16, b17, b18, b19, b20, b6, b8, b9]
+
+h2s.conditions; %conditions
+
+h2s=h2s.h2; %one solution depending on i2 and the coefficients of the polynomial to evaluate [b10, b12, b13, b14, b15, b16, b17, b18, b19, b20, b6, b8, b9]
+
+symvar(cy3(16)) %depends on [c4, h1, h2, i1, i2] amd [b10, b12, b13, b14, b15, b16, b17, b18, b19, b20, b5, b8, b9]
+ 
+ans =
+ 
+[b10, b12, b13, b14, b15, b16, b17, b18, b19, b20, b5, b8, b9, c4, h1, h2, i1, i2]
+ 
+
+h1s=solve(cy3(16), h1, 'ReturnConditions',true); %one solution depending on [c4, h2, i1, i2] and [b10, b12, b13, b14, b15, b16, b17, b18, b19, b20, b5, b8, b9]
+%since c4 and h2 depend on i2 and the polynomial coefficients, then h1 depends on i2 and the polynomial coefficients
+
+h1s.conditions;
+
+h1s=h1s.h1; %one solution depending on i2 and the coefficients of the polynomial to evaluate [b10, b12, b13, b14, b15, b16, b17, b18, b19, b20, b5, b8, b9]
+
+symvar(cy3(17)) %depends on [c4, h1, h2, i1, i2, j0, b10, b12, b13, b14, b15, b16, b17, b18, b19, b20, b4, b8, b9]
+ 
+ans =
+ 
+[b10, b12, b13, b14, b15, b16, b17, b18, b19, b20, b4, b8, b9, c4, h1, h2, i1, i2, j0]
+ 
+
+j0s=solve(cy3(17), j0, 'ReturnConditions',true); %one solution depending on [c4, h1, h2, i1, i2] and [b10, b12, b13, b14, b15, b16, b17, b18, b19, b20, b4, b8, b9]
+%since c4, h1, h2, i1 depend on i2, then j0s depends on i2 and the
+%coefficients of the polynomial to evaluate
+j0s.conditions;
+
+j0s=j0s.j0; %one solution depending on i2 and the coefficients of the polynomial to evaluate
+
+symvar(cy3(18)) %Depends on [c4, h1, h2, i1, i2, j0[ and [b10, b12, b13, b14, b15, b16, b17, b18, b19, b20, b3, b9]
+ 
+ans =
+ 
+[b10, b12, b13, b14, b15, b16, b17, b18, b19, b20, b3, b9, c4, h1, h2, i1, i2, j0]
+ 
+% [c4, h1, h2, i1, i2, j0] depend on i2, then equation symvar(cy3(18)) can
+% be written as on rational or polynomial equation in i2.
+
+%Taking into account (cy3(19:21)):
+
+j2 = b2 - h1s*i1s.i1(1); %h1s and i1s has three solutions i1s.i1(k), k=1,2,3 depending on i2
+
+j1 = b1;
+
+k0I = b0;
