@@ -1,4 +1,4 @@
-J.M. Alonso,, J. Sastre, J. Ibáñez, E. Defez, A general framework for matrix polynomial evaluation with reduced computational cost and improved stability.
+J.M. Alonso, J. Sastre, J. Ibanez, E. Defez, A Systematic Framework for Stable and Cost-Efficient Matrix Polynomial Evaluation, arXiv:2603.XXXXX, 2026.
 
 
 
