@@ -1,4 +1,4 @@
-J.M. Alonso, J. Sastre, J. Ibanez, E. Defez, A Systematic Framework for Stable and Cost-Efficient Matrix Polynomial Evaluation, arXiv:2603.XXXXX, 2026.
+J.M. Alonso, J. Sastre, J. Ibanez, E. Defez, A Systematic Framework for Stable and Cost-Efficient Matrix Polynomial Evaluation, arXiv:2603.23143, 2026.
 
 
 

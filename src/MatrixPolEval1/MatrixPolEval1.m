@@ -53,10 +53,18 @@ function [c_prec,leading_coeff_sign,c_vpa,er_min,all_cvpa,savings,s,p]=MatrixPol
 % % Full syntax example with 64-digit precision and default b:
 % [c_prec,~,c_vpa,er_min,all_cvpa,savings,s,p] = MatrixPolEval1([],'double',1,64)
 %
+% Authors: José Miguel Alonso, Jorge Sastre.
+%
+% Revised version: 2025/06/13.
+%
+% Group of High Performance Scientific Computation (HiPerSC)
+% Universitat Politècnica de València (Spain)
+% http://hipersc.blogs.upv.es
+%
 % References:
 % [1] J.M. Alonso, J. Sastre, J. Ibanez, E. Defez, A Systematic Framework 
 %     for Stable and Cost-Efficient Matrix Polynomial Evaluation, 
-%     arXiv:2603.XXXXX, 2026.
+%     arXiv:2603.23143, 2026.
 % [2] J. Sastre, Efficient evaluation of matrix polynomials, Linear 
 %     Algebra Appl., 539, 2018, 229-250.
 
