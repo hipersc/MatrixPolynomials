@@ -1,8 +1,8 @@
 function [c_vpa,c_double,c_single,type_pol,er_min,erd_min,ers_min,savings,s,q]=MatrixPolEval2(pol,b,s,ndigits)
 % MatrixPolEval2 displays the general evaluation formulas and computes 
 % their coefficients, saving up to two matrix products (2M) with respect to 
-% the Paterson-Stockmeyer (PS) method [1, 2] for polynomials with a 
-% non-zero leading coefficient. It computes the optimal coefficients 
+% the Paterson-Stockmeyer (PS) method for polynomials with a non-zero 
+% leading coefficient [1, 2]. It computes the optimal coefficients 
 % involved in the 6s formulation combined with the Paterson–Stockmeyer 
 % method.
 %
@@ -74,13 +74,11 @@ function [c_vpa,c_double,c_single,type_pol,er_min,erd_min,ers_min,savings,s,q]=M
 % b = ones(13,1);
 % [c_vpa,c_double,c_single,type_pol,er_min,erd_min,ers_min,savings,s,q]=MatrixPolEval2('exp',b)
 % 
-% the following result is obtained:
-% 
-% 
 % Example 2. In this example, we show how to obtain the coefficients of the 
-% z2qs formulation corresponding to the degree-35 Taylor polynomial of the 
+% Z2qs formulation corresponding to the degree-35 Taylor polynomial of the 
 % exponential function with s=5 and ndigits=64. In this case, we obtain an 
 % approximation with a final residual block of degree q = 5:
+%
 % b = 1./factorial(sym(0:35));
 % [c_vpa,c_double,c_single,type_pol,er_min,erd_min,ers_min,savings,s,q]=MatrixPolEval2('exp',b,5,64)
 % 
@@ -91,11 +89,12 @@ function [c_vpa,c_double,c_single,type_pol,er_min,erd_min,ers_min,savings,s,q]=M
 % Universitat Politècnica de València (Spain)
 %
 % References:
-% [1] J.M. Alonso, J. Sastre, J. Ibanez, E. Defez, A Systematic Framework 
-%     for Stable and Cost-Efficient Matrix Polynomial Evaluation, 
-%     arXiv:2603.23143, 2026.
-% [2] J. Sastre, Efficient evaluation of matrix polynomials, Linear 
-%     Algebra Appl., 539, 2018, 229-250.
+% [1] J. Ibáñez, J. Sastre, J.M. Alonso, E. Defez, A MATLAB Tool for the 
+%     Stable Generation of Matrix Polynomial Evaluation Schemes with 
+%     Two-Product Savings, arXiv:2607.28286, 2026.
+% [2] J. Sastre, J. Ibáñez, Efficient Evaluation of Matrix Polynomials 
+%     Beyond the Paterson-Stockmeyer Method, Mathematics 9(14), 1600, 2021,
+%     https://doi.org/10.3390/math9141600. 
 
 tic
 st = dbstack;
