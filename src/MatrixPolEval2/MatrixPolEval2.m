@@ -1,24 +1,29 @@
 function [c_vpa,c_double,c_single,type_pol,er_min,erd_min,ers_min,savings,s,q]=MatrixPolEval2(pol,b,s,ndigits)
-% MatrixPolEval2 displays the general evaluation formulas and computes 
-% their coefficients, saving up to two matrix products (2M) with respect to 
-% the Paterson-Stockmeyer (PS) method for polynomials with a non-zero 
-% leading coefficient [1, 2]. It computes the optimal coefficients 
-% involved in the 6s formulation combined with the Paterson–Stockmeyer 
-% method.
 %
-% [c_vpa,c_double,c_single,type_pol,er_min,erd_min,ers_min,savings,s,p]=MatrixPolEval2(pol,b,s,ndigits)
+%--------------------------------------------------------------------------
+% Description
+%--------------------------------------------------------------------------
+% MatrixPolEval2 computes the optimal coefficients involved in the 6s 
+% formulation combined with the Paterson–Stockmeyer (PS) method. It 
+% displays the general evaluation formulas and computes their coefficients,
+% saving up to two matrix products (2M) with respect to PS method for 
+% polynomials with a non-zero leading coefficient [1, 2, 3].
 %
-% This implementation considers evaluation formulas y0, y1, y2
-% and z2qs (3)-(6) and (15) from [1, Sec. 2], respectively.
-% 2M savings are possible for degrees m = 18, 21, 24, 26, 27, 28 and m >=
-% 30. 1M savings are possible for m = 12, 13, 14, 19, 20, 22, 23, 25 and 29.
-% Out cases, the PS method is recommended. The function filters out complex 
-% solutions and real solutions with negative leading coefficients, as 
-% similar solutions with positive leading coefficients are available. 
-% A warning is issued if the numerical stability is low, based on the 
-% test in [2, Ex. 3.1].
+% [c_vpa,c_double,c_single,type_pol,er_min,erd_min,ers_min,savings,s,p]=...
+%    MatrixPolEval2(pol,b,s,ndigits)
 %
-% Input data:
+% This implementation considers evaluation formulas Y0, Y1, Y2 and Z2qs 
+% (3)-(6) and (15) from [1, Sec. 2], respectively. 2M savings are possible 
+% for degrees m = 18, 21, 24, 26, 27, 28 and m >= 30. 1M savings are 
+% possible for m = 12, 13, 14, 19, 20, 22, 23, 25 and 29. Out cases, the PS
+% method is recommended. The function filters out complex solutions and 
+% real solutions with negative leading coefficients, as similar solutions 
+% with positive leading coefficients are available. A warning is issued if 
+% the numerical stability is low, based on the test in [3, Ex. 3.1].
+%
+%--------------------------------------------------------------------------
+% Input arguments
+%--------------------------------------------------------------------------
 % - pol: string identifying the polynomial b (default: 'exp', i.e. 
 %   exponential).
 % - b: vector [b(1) b(2) ... b(m+1)] containing the coefficients of a 
@@ -30,10 +35,10 @@ function [c_vpa,c_double,c_single,type_pol,er_min,erd_min,ers_min,savings,s,q]=M
 %   (default: minimal s giving the same cost to minimize memory overhead).
 % - ndigits: number of significant digits used in the MATLAB variable 
 %   precision arithmetic (vpa) function (default: 32).
-% - ndigits: number of digits for variable-precision arithmetic (default: 
-%   32).
 %
-% Output data:
+%--------------------------------------------------------------------------
+% Output arguments
+%--------------------------------------------------------------------------
 % - c_vpa, c_double, c_single: coefficients of the 6s + Paterson–Stockmeyer
 %   formulation [1] computed in vpa, double, and single precision, 
 %   respectively.
@@ -44,7 +49,7 @@ function [c_vpa,c_double,c_single,type_pol,er_min,erd_min,ers_min,savings,s,q]=M
 %      formulation.
 % - type_pol: variant of the 4s formulation used (1, 2, or 3 [1, Sec. 2]) 
 %   that yields the minimum error according to the stability test in 
-%   [2, Ex. 3.1].
+%   [3, Ex. 3.1].
 % - er_min, erd_min, and ers_min: they correspond, respectively, to the 
 %   minimum value of the reconstruction maximum relative error [2, Ex. 3.1]
 %   in vpa (er_min), double precision (erd_min), or single precision 
@@ -66,36 +71,98 @@ function [c_vpa,c_double,c_single,type_pol,er_min,erd_min,ers_min,savings,s,q]=M
 % and q are the corresponding parameters, d is the number of VPA digits 
 % used, and f is the formulation number associated with type_pol.
 %
-% Example 1. In this example, we show the procedure required to obtain the 
-% coefficients corresponding to the degree-12 polynomial whose coefficients 
-% are all equal to 1. In this case, the function uses by default the value 
-% of s equal to 2 and ndigits equal to 32:
+%--------------------------------------------------------------------------
+% Usage examples
+%--------------------------------------------------------------------------
+% Example 1: In this example, we show the procedure required to obtain the 
+% elements corresponding to the degree-12 polynomial whose coefficients 
+% are all equal to 1. Then, they will be used to compute the matrix 
+% polynomial of a given matrix. In this case, the function uses the values 
+% s = 2 and ndigits = 32 by default.
 %
 % b = ones(13,1);
-% [c_vpa,c_double,c_single,type_pol,er_min,erd_min,ers_min,savings,s,q]=MatrixPolEval2('exp',b)
-% 
-% Example 2. In this example, we show how to obtain the coefficients of the 
+% [c_vpa,c_double,c_single,type_pol,er_min,erd_min,ers_min,savings,s,q]=...
+%    MatrixPolEval2('exp',b)
+%
+% After executing this instruction, the coefficients are obtained in vpa, 
+% double, and single precision, together with the following output 
+% arguments:
+% type_pol = 2, er_min = 5.7016e-34, erd_min = 1.2969e-16, 
+% ers_min = 8.5798e-08, savings = 1, s = 2, and q = 0.
+%
+% To compute the value of the above polynomial for the matrix 
+% A = [0.1 -0.2; -0.1 0.3], we use the function z2qs as shown below:
+%
+% y2 = z2qs([0.1 -0.2; -0.1 0.3], c_double, s, type_pol)
+%
+% y2 =
+%     1.1475   -0.3279
+%    -0.1639    1.4754
+%
+% which coincides with the matrix obtained using the function polyvalm:
+%
+% B = polyvalm(ones(13,1), [0.1 -0.2; -0.1 0.3])
+%
+% B =
+%     1.1475   -0.3279
+%    -0.1639    1.4754
+%
+% Example 2: In this example, we show how to obtain the coefficients of the 
 % Z2qs formulation corresponding to the degree-35 Taylor polynomial of the 
-% exponential function with s=5 and ndigits=64. In this case, we obtain an 
-% approximation with a final residual block of degree q = 5:
+% exponential function with s = 5 and ndigits = 64. Then, they will used to
+% compute the Taylor approximation of the matrix. Note that scaling and 
+% squaring strategies may need to be employed to achieve higher accuracy.
 %
 % b = 1./factorial(sym(0:35));
-% [c_vpa,c_double,c_single,type_pol,er_min,erd_min,ers_min,savings,s,q]=MatrixPolEval2('exp',b,5,64)
-% 
+% [c_vpa,c_double,c_single,type_pol,er_min,erd_min,ers_min,savings,s,q]=...
+%    MatrixPolEval2('exp',b,5,64)
+%
+% In this case, we obtain:
+% type_pol = 1, er_min = 5.6970e-65, erd_min = 1.3333e-16,
+% ers_min = 8.2240e-08, savings = 2, s = 5, and q = 5.
+%
+% To compute the value of the above polynomial for the matrix 
+% A = [1 2; 0 3], we use the function z2qs as shown below:
+%
+% y2 = z2qs([1 2; 0 3], c_double, s, type_pol)
+%
+% y2 =
+%     2.7183   17.3673
+%     0       20.0855
+%
+% Since 
+% E = [exp(vpa(1))  exp(vpa(3)) - exp(vpa(1)); 
+%      0            exp(vpa(3))] 
+% is equal to exp(A), the relative error can be computed as:
+%
+% Er=double(norm(E - y2) / norm(E))
+%
+% Er =
+%     3.025514947427634e-17
+%
+%--------------------------------------------------------------------------
+% Copyright
+%--------------------------------------------------------------------------
 % Authors: Javier Ibáñez, Jorge Sastre and José Miguel Alonso
-% Revised version: July 28, 2026.
+% Revised version: August 3, 2026.
 %
 % High Performance Scientific Computing Group (HiPerSC)
 % Universitat Politècnica de València (Spain)
 %
-% References:
+%--------------------------------------------------------------------------
+% References
+%--------------------------------------------------------------------------
 % [1] J. Ibáñez, J. Sastre, J.M. Alonso, E. Defez, A MATLAB Tool for the 
 %     Stable Generation of Matrix Polynomial Evaluation Schemes with 
-%     Two-Product Savings, arXiv:2607.28286, 2026.
+%     Two-Product Savings, arXiv:2607.28286, 2026. 
+%     https://arxiv.org/abs/2607.28286
 % [2] J. Sastre, J. Ibáñez, Efficient Evaluation of Matrix Polynomials 
 %     Beyond the Paterson-Stockmeyer Method, Mathematics 9(14), 1600, 2021,
-%     https://doi.org/10.3390/math9141600. 
-
+%     https://doi.org/10.3390/math9141600
+% [3] J. Sastre, Efficient evaluation of matrix polynomials, Linear 
+%     Algebra Applications, 539, 2018, 229-250.
+%     https://doi.org/10.1016/j.laa.2017.11.010
+%
 tic
 st = dbstack;
 name= st.name;
